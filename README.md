@@ -83,11 +83,73 @@ Output:
 
 # 
 
-Step 5: Save and load the transformer
+Step 5: Save the transformer object
 
 ```python
 pipe.save("transformer.pkl")
 ```
+
+# Step 6: Load the saved transformer and apply it to deployment data
+You can load the saved transformer using the pickle module and apply it to new deployment data to preprocess it.
+
+```python 
+
+import pickle
+
+# Load the saved transformer
+with open("transformer.pkl", "rb") as f:
+    loaded_pipe = pickle.load(f)
+
+# Deployment data
+deployment_data = pd.DataFrame({
+    "A": [6],
+    "B": [3],
+    "C": [60]
+})
+
+# Transform the deployment data using the loaded transformer
+transformed_deployment_data = loaded_pipe.transform(deployment_data)
+print(transformed_deployment_data)
+
+```
+
+Output:
+
+```
+   A   C
+0  12  60
+
+```
+
+# Integration with scikit-learn Pipeline
+
+A noteworthy feature of the `SequentialTransformer` is that it can be seamlessly integrated with scikit-learn's `Pipeline` class. This further simplifies the preprocessing and deployment processes, enabling you to create an end-to-end machine learning pipeline that combines custom preprocessing steps with scikit-learn estimators.
+
+By incorporating the `SequentialTransformer` into an sklearn `Pipeline`, you can benefit from the full range of features provided by scikit-learn, such as cross-validation, grid search, and model evaluation.
+
+Here's a quick example of how to integrate initialized `SequentialTransformer` with an sklearn `Pipeline`:
+
+```python
+
+from sklearn.pipeline import Pipeline
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+# Create an sklearn pipeline with the custom SequentialTransformer and a LogisticRegression estimator
+pipeline = Pipeline([
+    ("preprocessor", pipe),  # Ensure the SequentialTransformer has been initialized and steps have been added
+    ("classifier", LogisticRegression())
+])
+
+# Fit the pipeline to the training data
+pipeline.fit(X_train, y_train)
+
+# Evaluate the pipeline on the test data
+y_pred = pipeline.predict(X_test)
+
+```
+
 
 # Comparison with scikit-learn
 
