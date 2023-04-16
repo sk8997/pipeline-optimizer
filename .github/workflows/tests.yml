@@ -1,4 +1,4 @@
-name: Python Tests and Coverage
+name: Tests and Coverage
 
 on:
   push:
@@ -25,7 +25,7 @@ jobs:
 
     - name: Run tests with coverage
       run: |
-        pytest --cov=pipeline_optimizer --cov-report=xml tests/test.py
+        pytest --cov=pipeline_optimizer --cov-report=xml ./tests/
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v2
