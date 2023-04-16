@@ -155,4 +155,32 @@ y_pred = pipeline.predict(X_test)
 
 When working with custom preprocessing functions using the scikit-learn library, you would typically define a custom class that inherits from `TransformerMixin` and implement `fit` and `transform` methods for each function. This can be time-consuming and may lead to code duplication.
 
+Alternatively, you can use scikit-learn's `FunctionTransformer` to create transformers from user-defined functions. However, using `FunctionTransformer` can become unwieldy when you have many preprocessing functions, as you need to create an instance of `FunctionTransformer` for each function and manage them individually.
+
+Here's an example of how you would use `FunctionTransformer` to accomplish the same preprocessing steps as in the previous example:
+
+```python
+
+from sklearn.preprocessing import FunctionTransformer
+
+# Define the preprocessing functions
+def drop_column(df: pd.DataFrame, col: str) -> pd.DataFrame:
+    return df.drop(columns=[col])
+
+def multiply(df: pd.DataFrame, col: str, multiplier: float) -> pd.DataFrame:
+    df[col] = df[col] * multiplier
+    return df
+
+# Create FunctionTransformer instances for each function
+drop_column_transformer = FunctionTransformer(drop_column, kw_args={"col": "B"})
+multiply_transformer = FunctionTransformer(multiply, kw_args={"col": "A", "multiplier": 2})
+
+# Apply the preprocessing functions to the toy dataset
+data_dropped = drop_column_transformer.transform(data)
+data_transformed = multiply_transformer.transform(data_dropped)
+
+```
+
+As you can see, using `FunctionTransformer` requires creating separate instances for each preprocessing function and managing them individually. This approach can become cumbersome when dealing with a large number of custom functions. In contrast, the `SequentialTransformer` class in the Pipeline Optimizer library provides a more streamlined and efficient way to manage and apply multiple preprocessing functions.
+
 With the Pipeline Optimizer library, you can easily define preprocessing functions and add them to the `SequentialTransformer` pipeline using the `@add_step` decorator. This approach is more concise and allows you to reuse your preprocessing functions across different projects effortlessly.
