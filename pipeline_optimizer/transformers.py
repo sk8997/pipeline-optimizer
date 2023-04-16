@@ -49,14 +49,11 @@ class SequentialTransformer(TransformerMixin):
 
         return X_copy
 
-    def _add(self, step: Callable, params: dict = None) -> None:
+    def _add(self, step: Callable, params: Optional[dict] = None) -> None:
         self.steps.append(step)
 
         if params:
             self.params[step] = params
-
-    def _add_params(self, params: dict, func: Callable) -> None:
-        self.params[func] = params
 
     def save(self, path: str) -> None:
         """Saves transformer in permanent memory
@@ -86,8 +83,7 @@ def add_step(pipe: SequentialTransformer) -> Callable:
             if v.default != inspect.Parameter.empty
         }
 
-        pipe._add_params(params, func)
-        pipe._add(func)
+        pipe._add(func, params)
         return func
     return wrapper
     
