@@ -25,8 +25,7 @@ jobs:
 
     - name: Run tests with coverage
       run: |
-        export PYTHONPATH=$PYTHONPATH:./main_directory
-        pytest -vv --cov=main_directory --cov-report=xml tests/
+        pytest -vv --cov=pipeline_optimizer --cov-report=xml ./tests/
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v2
