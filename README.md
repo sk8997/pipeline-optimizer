@@ -26,7 +26,7 @@ from pipeline_optimizer import SequentialTransformer, add_step
 
 ```
 
-3
+
 # Step 2: Load your dataset
 
 ```python
