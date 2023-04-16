@@ -55,8 +55,8 @@ class SequentialTransformer(TransformerMixin):
         if params:
             self.params[step] = params
 
-    def _add_params(self, params: dict) -> None:
-        self.params.update(params)
+    def _add_params(self, params: dict, func: Callable) -> None:
+        self.params[func] = params
 
     def save(self, path: str) -> None:
         """Saves transformer in permanent memory
@@ -68,6 +68,15 @@ class SequentialTransformer(TransformerMixin):
             pickle.dump(self, f)
 
 def add_step(pipe: SequentialTransformer) -> Callable:
+    """Wraps a function to automatically register it as a processing step in the provided pipeline, 
+       along with any default parameters for that function
+
+    Args:
+        pipe (SequentialTransformer): The pipeline object to which the processing step should be added.
+
+    Returns:
+        Callable: A wrapper function that accepts a function as its argument and registers it as a processing step in the pipe.
+    """
     def wrapper(func: Callable) -> Callable:
         # Find predefined parameters
         sig = inspect.signature(func)
@@ -77,8 +86,8 @@ def add_step(pipe: SequentialTransformer) -> Callable:
             if v.default != inspect.Parameter.empty
         }
 
-        pipe._add_params(params)
-        pipe.add(func)
+        pipe._add_params(params, func)
+        pipe._add(func)
         return func
     return wrapper
     
