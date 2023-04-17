@@ -1,12 +1,12 @@
 from dataclasses import dataclass, field
 from typing import Callable, Optional, List, Union, Dict
 import pandas as pd
-from sklearn.base import TransformerMixin
+from sklearn.base import TransformerMixin, BaseEstimator
 import inspect
 import pickle
 
 @dataclass
-class SequentialTransformer(TransformerMixin):
+class SequentialTransformer(BaseEstimator, TransformerMixin):
     steps: List[Callable] = field(default_factory=list)
     params: Dict[Callable, dict] = field(default_factory=dict)
 
@@ -21,6 +21,9 @@ class SequentialTransformer(TransformerMixin):
             raise ValueError("The step function expects a 'y' argument, but 'y' is not provided. Please provide a valid 'y' argument or modify the step function to work without it.")
         
         return step(X, y.copy(), **params)
+    
+    def fit(self, X: pd.DataFrame, y: Optional[Union[pd.DataFrame, pd.Series]] = None):
+        return self
 
     def transform(self, X: pd.DataFrame, y: Optional[Union[pd.DataFrame, pd.Series]] = None) -> Union[pd.DataFrame, pd.Series]:
         """Applies a series of preselected transformation steps to the input DataFrame X.
@@ -48,6 +51,9 @@ class SequentialTransformer(TransformerMixin):
             X_copy = self._apply_step(step, step_params, X_copy, y)
 
         return X_copy
+    
+    def fit_transform(self, X: pd.DataFrame, y: Optional[Union[pd.DataFrame, pd.Series]] = None) -> Union[pd.DataFrame, pd.Series]:
+        return self.transform(X, y)
 
     def _add(self, step: Callable, params: Optional[dict] = None) -> None:
         self.steps.append(step)
