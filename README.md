@@ -15,6 +15,12 @@ Pipeline Optimizer is a Python library that aims to simplify and automate the ma
 
 The library currently features a single class called `SequentialTransformer` which allows you to add custom preprocessing functions using a simple decorator. This class also integrates with scikit-learn's `TransformerMixin`, making it compatible with the widely-used scikit-learn library.
 
+# Installation
+
+```bash
+pip install pipeline_optimizer
+```
+
 # SequentialTransformer
 
 `SequentialTransformer` is a class that stores a list of preprocessing steps and applies them sequentially to input data. You can easily add a custom preprocessing function to its memory using the `@add_step` decorator. The class also provides methods to transform the input data, save the transformer to disk, and load it for later use.
