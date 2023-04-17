@@ -60,11 +60,11 @@ labels = pd.Series([0, 1, 0, 1, 1])
 pipe = SequentialTransformer()
 
 @add_step(pipe)
-def drop_column(df: pd.DataFrame, col: str) -> pd.DataFrame:
+def drop_column(df: pd.DataFrame, col: str = "B") -> pd.DataFrame:
     return df.drop(columns=[col])
 
 @add_step(pipe)
-def multiply(df: pd.DataFrame, col: str, multiplier: float) -> pd.DataFrame:
+def multiply(df: pd.DataFrame, col: str = "A", multiplier: float = 2) -> pd.DataFrame:
     df[col] = df[col] * multiplier
     return df
 
@@ -146,11 +146,11 @@ Here's a quick example of how to integrate initialized `SequentialTransformer` w
 pipe = SequentialTransformer()
 
 @add_step(pipe)
-def drop_column(df: pd.DataFrame, col: str) -> pd.DataFrame:
+def drop_column(df: pd.DataFrame, col: str = "B") -> pd.DataFrame:
     return df.drop(columns=[col])
 
 @add_step(pipe)
-def multiply(df: pd.DataFrame, col: str, multiplier: float) -> pd.DataFrame:
+def multiply(df: pd.DataFrame, col: str = "A", multiplier: float = 2) -> pd.DataFrame:
     df[col] = df[col] * multiplier
     return df
 
