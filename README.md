@@ -157,7 +157,7 @@ def multiply(df: pd.DataFrame, col: str, multiplier: float) -> pd.DataFrame:
 # Create an sklearn pipeline with the custom SequentialTransformer and a Linear Discriminant Analysis
 pipeline = Pipeline([
     ("preprocessor", pipe),  # Ensure the SequentialTransformer has been initialized and steps have been added
-    ("lda", LDA())
+    ("lda", LinearDiscriminantAnalysis())
 ])
 
 # Fit the pipeline 
