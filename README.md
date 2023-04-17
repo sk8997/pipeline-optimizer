@@ -1,8 +1,9 @@
 
 
 
+![pipe-logo](https://user-images.githubusercontent.com/84877088/232358047-f8545063-5053-4a9e-a24e-e9c266283f5d.png)
 
-![brandmark-design (1)](https://user-images.githubusercontent.com/84877088/232358011-a0d79eaf-c93a-49be-a0e3-af3b758738b4.png)
+
 
 
 [![Tests and Coverage](https://github.com/sk8997/pipeline-optimizer/actions/workflows/tests.yml/badge.svg)](https://github.com/sk8997/pipeline-optimizer/actions/workflows/tests.yml)
