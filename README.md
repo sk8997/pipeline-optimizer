@@ -154,17 +154,15 @@ def multiply(df: pd.DataFrame, col: str, multiplier: float) -> pd.DataFrame:
     df[col] = df[col] * multiplier
     return df
 
-# Create an sklearn pipeline with the custom SequentialTransformer and a LogisticRegression estimator
+# Create an sklearn pipeline with the custom SequentialTransformer and a Linear Discriminant Analysis
 pipeline = Pipeline([
     ("preprocessor", pipe),  # Ensure the SequentialTransformer has been initialized and steps have been added
-    ("classifier", LogisticRegression())
+    ("lda", LDA())
 ])
 
-# Fit the pipeline to the training data
-pipeline.fit_transform(X_train, y_train)
+# Fit the pipeline 
+pipeline.fit_transform(X, y)
 
-# Make predictions
-y_pred = pipeline.predict(X_test)
 
 ```
 
