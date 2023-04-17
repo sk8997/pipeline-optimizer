@@ -14,16 +14,12 @@ class SequentialTransformer(BaseEstimator, TransformerMixin):
         return self
 
     @staticmethod
-    def _apply_step(step: Callable, params: dict, X: pd.DataFrame, y: Optional[pd.Series] = None) -> Union[pd.DataFrame, pd.Series]:
-        step_signature = inspect.signature(step)
-
-        if 'y' not in step_signature.parameters:
-            return step(X, **params)
+    def _apply_step(step: Callable, params: dict, X: pd.DataFrame) -> Union[pd.DataFrame, pd.Series]:
         
-        if y is None:
-            raise ValueError("The step function expects a 'y' argument, but 'y' is not provided. Please provide a valid 'y' argument or modify the step function to work without it.")
+        if not isinstance(X, pd.DataFrame):
+            raise ValueError("The input 'X' must be a pandas DataFrame.")
         
-        return step(X, y.copy(), **params)
+        return step(X, **params)
     
 
     def transform(self, X: pd.DataFrame) -> Union[pd.DataFrame, pd.Series]:
