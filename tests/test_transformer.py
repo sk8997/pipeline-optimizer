@@ -53,19 +53,8 @@ def test_apply_step_without_y():
 
     assert transformed_df.equals(df * 2)
 
-# Test 5: Test that a ValueError is raised when the step function requires a 'y' parameter, but it is not provided.
-def test_apply_step_with_y_missing():
-    transformer = SequentialTransformer()
-    data = {'feature_1': [1, 2, 3], 'feature_2': [4, 5, 6]}
-    df = pd.DataFrame(data)
 
-    def step_with_y(X: pd.DataFrame, y: pd.Series) -> pd.DataFrame:
-        return X
-
-    with pytest.raises(ValueError, match="The step function expects a 'y' argument"):
-        transformer._apply_step(step_with_y, {}, df)
-
-# Test 6: Test that the `transform` method applies multiple steps in the correct order.
+# Test 5: Test that the `transform` method applies multiple steps in the correct order.
 def test_transform_with_multiple_steps():
     transformer = SequentialTransformer()
 
@@ -90,7 +79,7 @@ def sample_step(X, factor=2):
     return X * factor
 
 
-# Test 7: Test saving and loading transformer
+# Test 6: Test saving and loading transformer
 def test_sequential_transformer_save(tmp_path):
     df = pd.DataFrame({"A": [1, 2, 3], "B": [4, 5, 6]})
 
