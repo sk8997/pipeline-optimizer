@@ -10,6 +10,9 @@ class SequentialTransformer(BaseEstimator, TransformerMixin):
     steps: List[Callable] = field(default_factory=list)
     params: Dict[Callable, dict] = field(default_factory=dict)
 
+    def fit(self, X: pd.DataFrame, y: Optional[Union[pd.DataFrame, pd.Series]] = None):
+        return self
+
     @staticmethod
     def _apply_step(step: Callable, params: dict, X: pd.DataFrame, y: Optional[pd.Series] = None) -> Union[pd.DataFrame, pd.Series]:
         step_signature = inspect.signature(step)
@@ -22,10 +25,8 @@ class SequentialTransformer(BaseEstimator, TransformerMixin):
         
         return step(X, y.copy(), **params)
     
-    def fit(self, X: pd.DataFrame, y: Optional[Union[pd.DataFrame, pd.Series]] = None) -> Union[pd.DataFrame, pd.Series]:
-        return X
 
-    def transform(self, X: pd.DataFrame, y: Optional[Union[pd.DataFrame, pd.Series]] = None) -> Union[pd.DataFrame, pd.Series]:
+    def transform(self, X: pd.DataFrame) -> Union[pd.DataFrame, pd.Series]:
         """Applies a series of preselected transformation steps to the input DataFrame X.
 
         Args:
@@ -48,12 +49,12 @@ class SequentialTransformer(BaseEstimator, TransformerMixin):
                 raise ValueError("Expected a callable object (function/method) in 'steps' list, but encountered a non-callable object.")
             
             step_params = self.params.get(step, {})
-            X_copy = self._apply_step(step, step_params, X_copy, y)
+            X_copy = self._apply_step(step, step_params, X_copy)
 
         return X_copy
     
     def fit_transform(self, X: pd.DataFrame, y: Optional[Union[pd.DataFrame, pd.Series]] = None) -> Union[pd.DataFrame, pd.Series]:
-        return self.transform(X, y)
+        return self.transform(X)
 
     def _add(self, step: Callable, params: Optional[dict] = None) -> None:
         self.steps.append(step)
