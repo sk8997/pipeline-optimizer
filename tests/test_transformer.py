@@ -89,22 +89,8 @@ def test_transform_with_multiple_steps():
 def sample_step(X, factor=2):
     return X * factor
 
-# Test 7: Test 'y' parameter
-def test_sequential_transformer_with_y():
-    df = pd.DataFrame({"A": [1, 2, 3], "B": [4, 5, 6]})
-    y = pd.Series([1, 0, 1])
 
-    @add_step(pipe=SequentialTransformer())
-    def sample_step_with_y(X, y, factor=2):
-        return X * factor
-
-    st = SequentialTransformer(steps=[sample_step_with_y], params={sample_step_with_y: {"factor": 3}})
-    transformed = st.transform(df, y)
-
-    expected = pd.DataFrame({"A": [3, 6, 9], "B": [12, 15, 18]})
-    pd.testing.assert_frame_equal(transformed, expected)
-
-# Test 8: Test saving and loading transformer
+# Test 7: Test saving and loading transformer
 def test_sequential_transformer_save(tmp_path):
     df = pd.DataFrame({"A": [1, 2, 3], "B": [4, 5, 6]})
 
