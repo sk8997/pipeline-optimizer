@@ -1,5 +1,7 @@
 
-![pipe-logo](https://user-images.githubusercontent.com/84877088/232350231-c115e4bf-700a-4b54-82bb-682dcd85e202.png)
+
+
+![pipe-logo](https://user-images.githubusercontent.com/84877088/232358047-f8545063-5053-4a9e-a24e-e9c266283f5d.png)
 
 
 
@@ -141,10 +143,16 @@ Here's a quick example of how to integrate initialized `SequentialTransformer` w
 
 ```python
 
-from sklearn.pipeline import Pipeline
-from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
+pipe = SequentialTransformer()
+
+@add_step(pipe)
+def drop_column(df: pd.DataFrame, col: str) -> pd.DataFrame:
+    return df.drop(columns=[col])
+
+@add_step(pipe)
+def multiply(df: pd.DataFrame, col: str, multiplier: float) -> pd.DataFrame:
+    df[col] = df[col] * multiplier
+    return df
 
 # Create an sklearn pipeline with the custom SequentialTransformer and a LogisticRegression estimator
 pipeline = Pipeline([
@@ -153,7 +161,7 @@ pipeline = Pipeline([
 ])
 
 # Fit the pipeline to the training data
-pipeline.fit(X_train, y_train)
+pipeline.fit_transform(X_train, y_train)
 
 # Make predictions
 y_pred = pipeline.predict(X_test)
