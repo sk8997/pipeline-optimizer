@@ -161,7 +161,7 @@ pipeline = Pipeline([
 ])
 
 # Fit the pipeline to the training data
-pipeline.fit(X_train, y_train)
+pipeline.fit_transform(X_train, y_train)
 
 # Make predictions
 y_pred = pipeline.predict(X_test)
