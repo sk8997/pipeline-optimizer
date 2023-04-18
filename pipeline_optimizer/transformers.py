@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Callable, Optional, List, Union, Dict
+from typing import Callable, Optional, List, Union, Dict, TypeVar, Any
 import pandas as pd
 from sklearn.base import TransformerMixin, BaseEstimator
 import inspect
@@ -9,9 +9,6 @@ import pickle
 class SequentialTransformer(BaseEstimator, TransformerMixin):
     steps: List[Callable] = field(default_factory=list)
     params: Dict[Callable, dict] = field(default_factory=dict)
-
-    def fit(self, X: pd.DataFrame, y: Optional[Union[pd.DataFrame, pd.Series]] = None):
-        return self
 
     @staticmethod
     def _apply_step(step: Callable, params: dict, X: pd.DataFrame) -> Union[pd.DataFrame, pd.Series]:
@@ -49,6 +46,10 @@ class SequentialTransformer(BaseEstimator, TransformerMixin):
 
         return X_copy
     
+    def fit(self, X: pd.DataFrame, y: Optional[Union[pd.DataFrame, pd.Series]] = None):
+        """No-op."""
+        return self
+    
     def fit_transform(self, X: pd.DataFrame, y: Optional[Union[pd.DataFrame, pd.Series]] = None) -> Union[pd.DataFrame, pd.Series]:
         return self.transform(X)
 
@@ -67,7 +68,8 @@ class SequentialTransformer(BaseEstimator, TransformerMixin):
         with open(path, "wb") as f:
             pickle.dump(self, f)
 
-def add_step(pipe: SequentialTransformer) -> Callable:
+T = TypeVar("T", bound=Callable[..., Any])
+def add_step(pipe: SequentialTransformer) -> Callable[[T], T]:
     """Wraps a function to automatically register it as a processing step in the provided pipeline, 
        along with any default parameters for that function
 
@@ -77,7 +79,7 @@ def add_step(pipe: SequentialTransformer) -> Callable:
     Returns:
         Callable: A wrapper function that accepts a function as its argument and registers it as a processing step in the pipe.
     """
-    def wrapper(func: Callable) -> Callable:
+    def wrapper(func: T) -> T:
         # Find predefined parameters
         sig = inspect.signature(func)
         params = {
