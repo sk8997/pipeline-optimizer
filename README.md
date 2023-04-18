@@ -7,7 +7,9 @@
 
 
 <div align="center">
-[![Tests and Coverage](https://github.com/sk8997/pipeline-optimizer/actions/workflows/tests.yml/badge.svg)](https://github.com/sk8997/pipeline-optimizer/actions/workflows/tests.yml)
+<a href="https://github.com/sk8997/pipeline-optimizer/actions/workflows/tests.yml">
+  <img src="https://github.com/sk8997/pipeline-optimizer/actions/workflows/tests.yml/badge.svg" alt="Tests" />
+</a>
 <a href="https://codecov.io/gh/sk8997/pipeline-optimizer" > 
  <img src="https://codecov.io/gh/sk8997/pipeline-optimizer/branch/main/graph/badge.svg?token=BCWYCTXZPA"/> 
  </a>
